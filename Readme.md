@@ -43,27 +43,11 @@ Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inf
 ├── data
 │   ├── simraw2.pickle
 │   ├── simtrue2.pickle
-|	|-- dca-genes.pickle
-├── cml
-│   ├── cml_build.py
-│   ├── cml_servemodel.py
-│   ├── install_deps.py
-├── metrics
-├── models
-│   ├── ae.py
-│   ├── bigan.py
-│   ├── ocsvm.py
-│   ├── pca.py
-│   ├── seq2seq.py
-│   ├── vae.py
-├── utils
-│   ├── data_utils.py
-│   ├── eval_utils.py
-│   ├── train_utils.py
-├── train.py
-├── test.py
-```
+│   ├── simtrue2.pickle
+├── img
+│   ├── dca_gm.png
 
+```
 - report.ipynb: the report of the project. Includes model implementation and experiments.
 - original_dca.ipynb: runs the code of the original DCA implementation (available [here](https://github.com/theislab/dca) to be compared with the current (simplified) implementation.
 - generate_data.ipynb: notebook to generate simulated data using splatter (available (here)[https://github.com/Oshlack/splatter])
@@ -72,6 +56,9 @@ Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inf
 - preprocess.py: helper functions for reading and preprocessing givten data (genes.csv) and performing basic operations like generating plots and normalizing a given anndata object.
 
 # Summary of Results
+
+We tested the model by generating PCA clustering plots on noise-ridden and denoised simulated data. We compared the performance of our model to the original DCA implementation. The results are shown below:
+
 
 # Reproducibility
 
