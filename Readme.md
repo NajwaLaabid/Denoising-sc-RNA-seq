@@ -18,11 +18,16 @@ This work builds on [DCA]() a method reported to scale linearly with data and im
 ## Denoising from a Bayesian Perspective
 One approach to denoising is to consider the generative model of the counts. It is wildly speculated that read-based methods implicitly assume a [Zero-Inflated Negative Binomial](https://en.wikipedia.org/wiki/Zero-inflated_model)(ZINB) as a count distribution [2]. The generative process for this data looks something like this:
 
-> **assume** onTable &subseteq; C, inHand &subseteq; C  
-> **let** highestOnTable = max {r | (s,r) &in; onTable}  
-> **for** (s, r) **in** inHand:  
-> &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; highestOnTable **return false**  
-> **return true**
+> **input** 𝜋𝑔 ,  𝜇𝑔 ,  𝜃𝑔 ,  𝐺𝑒𝑛𝑒𝑠_{1𝑥𝑔}  // array of genes of size  𝑔   
+> **init** 𝑑𝑎𝑡𝑎_{𝑐𝑥𝑔}=0  // matrix of counts of size cells x genes  
+> **output** 𝑑𝑎𝑡𝑎_{𝑐𝑥𝑔}  // with updated count values
+> **for** g in  𝐺𝑒𝑛𝑒𝑠_{1𝑥𝑔}:
+> &nbsp;&nbsp;&nbsp;&nbsp; Draw assignments for cells  𝑍𝑐  ~ Bernoulli( 𝜋𝑔 )
+> &nbsp;&nbsp;&nbsp;&nbsp; **for** every cell  𝑐𝑖  in  𝑍𝑐[𝑍𝑐==0] :
+> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Set data[ 𝑐𝑖 , g] = 0 (dropout)
+> &nbsp;&nbsp;&nbsp;&nbsp; **for** every cell  𝑐𝑖  in  𝑍𝑐[𝑍𝑐==1] :
+> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Set data[ 𝑐𝑖 , g] = mean ( 𝜇𝑔 ) of NB( 𝜇𝑔 ,  𝜃𝑔 )
+> **return 𝑑𝑎𝑡𝑎_{𝑐𝑥𝑔}**
 
 It can also be visualized through a graphical model as shown below:
 
