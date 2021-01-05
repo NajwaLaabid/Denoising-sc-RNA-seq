@@ -29,21 +29,40 @@ One approach to denoising is to consider the generative model of the counts. It 
 > &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Set data[ 𝑐𝑖 , g] = mean ( 𝜇𝑔 ) of NB( 𝜇𝑔 ,  𝜃𝑔 )  
 > **return 𝑑𝑎𝑡𝑎_{𝑐𝑥𝑔}**  
 
-> **assume** onTable &subseteq; C, inHand &subseteq; C  
-> **let** highestOnTable = max {r | (s,r) &in; onTable}  
-> **for** (s, r) **in** inHand:  
-> &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; highestOnTable **return false**  
-> **return true**
+It can also be visualized through a plate diagram as shown below:
 
-It can also be visualized through a graphical model as shown below:
-
-[add picture of graphical model]
+![Plate diagram for DCA](https://github.com/NajwaLaabid/Denoising-sc-RNA-seq/blob/main/img/dca_gm.png "DCA GM")
 
 Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inflated_model) for every gene in the matrix, and use the mean of the distribution as an imputation value. The fitting (or inference) can be done using a deep auto-encoder model.
 
 ## Auto-encoders for inference
 
 # Structure of Repo
+
+```bash
+├── data
+│   ├── simraw2.pickle
+│   ├── simtrue2.pickle
+|	|-- dca-genes.pickle
+├── cml
+│   ├── cml_build.py
+│   ├── cml_servemodel.py
+│   ├── install_deps.py
+├── metrics
+├── models
+│   ├── ae.py
+│   ├── bigan.py
+│   ├── ocsvm.py
+│   ├── pca.py
+│   ├── seq2seq.py
+│   ├── vae.py
+├── utils
+│   ├── data_utils.py
+│   ├── eval_utils.py
+│   ├── train_utils.py
+├── train.py
+├── test.py
+```
 
 - report.ipynb: the report of the project. Includes model implementation and experiments.
 - original_dca.ipynb: runs the code of the original DCA implementation (available [here](https://github.com/theislab/dca) to be compared with the current (simplified) implementation.
