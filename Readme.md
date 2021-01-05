@@ -18,11 +18,11 @@ This work builds on [DCA]() a method reported to scale linearly with data and im
 ## Denoising from a Bayesian Perspective
 One approach to denoising is to consider the generative model of the counts. It is wildly speculated that read-based methods implicitly assume a [Zero-Inflated Negative Binomial](https://en.wikipedia.org/wiki/Zero-inflated_model)(ZINB) as a count distribution [2]. The generative process for this data looks something like this:
 
-	> **assume** onTable &subseteq; C, inHand &subseteq; C  
-    > **let** highestOnTable = max {r | (s,r) &in; onTable}  
-    > **for** (s, r) **in** inHand:  
-    > &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; highestOnTable **return false**  
-    > **return true**
+> **assume** onTable &subseteq; C, inHand &subseteq; C  
+> **let** highestOnTable = max {r | (s,r) &in; onTable}  
+> **for** (s, r) **in** inHand:  
+> &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; highestOnTable **return false**  
+> **return true**
 
 It can also be visualized through a graphical model as shown below:
 
