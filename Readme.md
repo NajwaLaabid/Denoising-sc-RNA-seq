@@ -1,8 +1,3 @@
----
-header-includes:
-  - \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
----
-
 # Denoising scRNA-seq Data: A Bayesian Approach
 
 This project explores the use of a deep auto-encoder with a noise model loss function on the task of denoising scRNA-seq data. More information on the method can be found in the [original paper](https://www.nature.com/articles/s41467-018-07931-2). 
@@ -23,28 +18,11 @@ This work builds on [DCA]() a method reported to scale linearly with data and im
 ## Denoising from a Bayesian Perspective
 One approach to denoising is to consider the generative model of the counts. It is wildly speculated that read-based methods implicitly assume a [Zero-Inflated Negative Binomial](https://en.wikipedia.org/wiki/Zero-inflated_model)(ZINB) as a count distribution [2]. The generative process for this data looks something like this:
 
-
-# Algorithm 1
-Just a sample algorithmn
-\begin{algorithm}[H]
-\DontPrintSemicolon
-\SetAlgoLined
-\KwResult{Write here the result}
-\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
-\Input{Write here the input}
-\Output{Write here the output}
-\BlankLine
-\While{While condition}{
-    instructions\;
-    \eIf{condition}{
-        instructions1\;
-        instructions2\;
-    }{
-        instructions3\;
-    }
-}
-\caption{While loop with If/Else condition}
-\end{algorithm} 
+	> **assume** onTable &subseteq; C, inHand &subseteq; C  
+    > **let** highestOnTable = max {r | (s,r) &in; onTable}  
+    > **for** (s, r) **in** inHand:  
+    > &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; highestOnTable **return false**  
+    > **return true**
 
 It can also be visualized through a graphical model as shown below:
 
