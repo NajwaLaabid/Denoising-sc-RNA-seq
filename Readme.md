@@ -39,21 +39,12 @@ Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inf
 
 # Structure of Repo
 
-```bash
-├── data
-│   ├── simraw2.pickle
-│   ├── simtrue2.pickle
-│   ├── simtrue2.pickle
-├── img
-│   ├── dca_gm.png
-
-```
-- report.ipynb: the report of the project. Includes model implementation and experiments.
-- original_dca.ipynb: runs the code of the original DCA implementation (available [here](https://github.com/theislab/dca) to be compared with the current (simplified) implementation.
-- generate_data.ipynb: notebook to generate simulated data using splatter (available (here)[https://github.com/Oshlack/splatter])
-- data/: directory where data files (given data genes.csv and simulated data) are stored. The outputs of the original_dca analysis are also saved there.
-- img/: directory holding the images used in the report.
-- preprocess.py: helper functions for reading and preprocessing givten data (genes.csv) and performing basic operations like generating plots and normalizing a given anndata object.
+- `report.ipynb`: the report of the project. Includes model implementation and experiments.
+- `original_dca.ipynb`: runs the code of the original DCA implementation (available [here](https://github.com/theislab/dca) to be compared with the current (simplified) implementation.
+- `generate_data.ipynb`: notebook to generate simulated data using splatter (available (here)[https://github.com/Oshlack/splatter])
+- `data/`: directory where data files (given data genes.csv and simulated data) are stored. The outputs of the original_dca analysis are also saved there.
+- `img/`: directory holding the images used in the report.
+- `preprocess.py`: helper functions for reading and preprocessing givten data (genes.csv) and performing basic operations like generating plots and normalizing a given anndata object.
 
 # Summary of Results
 
