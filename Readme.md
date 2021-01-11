@@ -7,12 +7,9 @@ This project explores the use of a deep auto-encoder with a noise model loss fun
 ## A foreword on scRNA-seq Data
 Single-cell RNA sequencing (scRNA-seq) is a recent sequencing method capable of getting the counts of expressed genes per cell (as opposed to count per cell sample like [Bulk-seq]() technologies). This new sequencing resolution allows studying biological phenomena at a new resolution. The downside of the method is generating high-dimensional sparse matrices, which are exacerbated by noise-inducing operations like amplification and [add more]. The output can therefore be a large matrix with multiple false zero-counts, known as *dropout*. 
 
-Zero-counts reflect that a gene is repressed for a given cell (i.e., the cell in its current state does not use said gene to function). False zero counts can therefore give the wrong idea about the state of the cell. It would be helpful to identify the false counts and impute them (i.e, extrapolate their values) from neighboring cells and/or genes. This operation is known as *denoising*. Various methods have been proposed for this task, including:
-- scImpute:
-- 
-- And more recently:
+Zero-counts reflect that a gene is repressed for a given cell (i.e., the cell in its current state does not use said gene to function). False zero counts can therefore give the wrong idea about the state of the cell. It would be helpful to identify the false counts and impute them (i.e, extrapolate their values) from neighboring cells and/or genes. This operation is known as *denoising*. 
 
-This work builds on [DCA]() a method reported to scale linearly with data and improve the results of multiple  scRNA-seq downstream analyses, including cluster separation as shown below.
+This work builds on [DCA](https://github.com/theislab/dca/) a method reported to scale linearly with data and improve the results of multiple  scRNA-seq downstream analyses, including cluster separation as shown below.
 
 
 ## Denoising from a Bayesian Perspective
@@ -37,30 +34,75 @@ Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inf
 
 ## Auto-encoders for inference
 
+A deep auto-encoder model is proposed as a mechanism for infering the parameters of the noise model. The model is shown to scale linearly with the size of the data [1], which is an important advantage especially when dealing with shallow scRNA-seq data. The model used in this study has a fixed architecture reported below. More extensive hyper parameter/architecture tuning (and flexibility in setting both) as proposed in the [original work](https://github.com/theislab/dca/).
+
+Model: "model_24"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+count (InputLayer)              [(None, 195)]        0                                            
+__________________________________________________________________________________________________
+encoder (Dense)                 (None, 64)           12544       count[0][0]                      
+__________________________________________________________________________________________________
+batch_normalization_12 (BatchNo (None, 64)           192         encoder[0][0]                    
+__________________________________________________________________________________________________
+act_encoder (Activation)        (None, 64)           0           batch_normalization_12[0][0]     
+__________________________________________________________________________________________________
+bottleneck (Dense)              (None, 32)           2080        act_encoder[0][0]                
+__________________________________________________________________________________________________
+batch_normalization_13 (BatchNo (None, 32)           96          bottleneck[0][0]                 
+__________________________________________________________________________________________________
+act_bottleneck (Activation)     (None, 32)           0           batch_normalization_13[0][0]     
+__________________________________________________________________________________________________
+decoder (Dense)                 (None, 64)           2112        act_bottleneck[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_14 (BatchNo (None, 64)           192         decoder[0][0]                    
+__________________________________________________________________________________________________
+act_decoder (Activation)        (None, 64)           0           batch_normalization_14[0][0]     
+__________________________________________________________________________________________________
+mean (Dense)                    (None, 195)          12675       act_decoder[0][0]                
+__________________________________________________________________________________________________
+size_factors (InputLayer)       [(None, 1)]          0                                            
+__________________________________________________________________________________________________
+lambda (Lambda)                 multiple             0           mean[0][0]                       
+                                                                 size_factors[0][0]               
+__________________________________________________________________________________________________
+dispersion (Dense)              (None, 195)          12675       act_decoder[0][0]                
+__________________________________________________________________________________________________
+pi (Dense)                      (None, 195)          12675       act_decoder[0][0]                
+__________________________________________________________________________________________________
+slice (SliceLayer)              (None, 195)          0           lambda[4][0]                     
+                                                                 dispersion[0][0]                 
+                                                                 pi[0][0]                         
+==================================================================================================
+Total params: 55,241
+Trainable params: 54,921
+Non-trainable params: 320
+
+
 # Structure of Repo
 
-- `report.ipynb`: the report of the project. Includes model implementation and experiments.
-- `original_dca.ipynb`: runs the code of the original DCA implementation (available [here](https://github.com/theislab/dca) to be compared with the current (simplified) implementation.
-- `generate_data.ipynb`: notebook to generate simulated data using splatter (available (here)[https://github.com/Oshlack/splatter])
-- `data/`: directory where data files (given data genes.csv and simulated data) are stored. The outputs of the original_dca analysis are also saved there.
-- `img/`: directory holding the images used in the report.
-- `preprocess.py`: helper functions for reading and preprocessing givten data (genes.csv) and performing basic operations like generating plots and normalizing a given anndata object.
+* `data/`: holds the simulated data for experiments. 
+* `img/`: directory holding the images used in the report.
+* `model/`: code for building the AE model. The actual model is defined in `zae.py`.
+* `utils/`: helper code for reading the data and generating plots.
+	* `data_utils.py`: helper code for handling the data.
+	* `plot_utils.py`: helper functions for plots.
+	* `simulate.r`: an *R* script to simulate scRNA-seq data using [splatter](https://github.com/Oshlack/splatter) library. Code is taken from an [example](https://github.com/theislab/dca/blob/master/reproducibility/code/Figure2.ipynb) notebook in the dca repo.
+* `experiments.ipynb`: shows how denoising helps recover the original clusters of a noise-ridden simulated data.
+* `original_dca.ipynb`: runs the code of the original dca library.
 
 # Summary of Results
 
 We tested the model by generating PCA clustering plots on noise-ridden and denoised simulated data. We compared the performance of our model to the original DCA implementation. The results are shown below:
 
+![Denoising results](https://github.com/NajwaLaabid/Denoising-sc-RNA-seq/blob/main/img/results.png "Results")
 
-# Reproducibility
-
-We recommend running the notebooks in the following order: generate_data.ipynb > original_dca.ipynb > report.ipynb
-The report can also be ran/viewed on its own, since the data generated from the other two notebooks is already available in 'data/'.
-
-# Disclaimer:
-This project is based on the Deep Count Auto-encoder (DCA) framework presented in [1]. The code used here is therefore largely adapted from DCA's, with modifications for simplicity and dependencies upgrade (the original DCA code is not compatible with TensorFlow v2 along with other libraries). In particular, the code in generate_data is taken from [here](https://github.com/theislab/dca/blob/master/reproducibility/code/Figure2.ipynb).
-
-# Warnings:
-Colab seems to have trouble downloading splatter and its dependencies. We recommend running generate_data.ipynb on a local machine then uploading the generated files to the 'data/' folder in drive if similar issues are faced.
+# Warnings & Future Work
+* A GPU is recommended for training the model.
+* The [DCA](https://github.com/theislab/dca/) library has old dependencies. The notebook executing DCA code installs the specific versions required of the libraries in the first line.
+* TODO: figure out why Google Colab seems to have a bit of trouble processing the *R* simulation script. It is recommended to run generate data on your local machine for now.
+* TODO: rewrite the loss function to be compatible with TF 2.0. Currently disabling eager execution provides a quick fix to the problem (as shown in `experiments.ipynb`).
 
 # References
 
