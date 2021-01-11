@@ -52,7 +52,7 @@ A deep auto-encoder model is proposed as a mechanism for infering the parameters
 
 We tested the model by generating PCA clustering plots on noise-ridden and denoised simulated data. We compared the performance of our model to the original DCA implementation. The results are shown below:
 
-![Denoising results](https://github.com/NajwaLaabid/Denoising-sc-RNA-seq/blob/main/img/results.png "Results")
+![Denoising results](https://github.com/NajwaLaabid/Denoising-sc-RNA-seq/blob/main/img/compare_dca.png "Results")
 
 # Warnings & Future Work
 * A GPU is recommended for training the model.
