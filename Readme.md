@@ -34,51 +34,7 @@ Using this knowledge, we can fit a [ZINB](https://en.wikipedia.org/wiki/Zero-inf
 
 ## Auto-encoders for inference
 
-A deep auto-encoder model is proposed as a mechanism for infering the parameters of the noise model. The model is shown to scale linearly with the size of the data [1], which is an important advantage especially when dealing with shallow scRNA-seq data. The model used in this study has a fixed architecture reported below. More extensive hyper parameter/architecture tuning (and flexibility in setting both) as proposed in the [original work](https://github.com/theislab/dca/).
-
-Model: "model_24"
-__________________________________________________________________________________________________
-Layer (type)                    Output Shape         Param #     Connected to                     
-==================================================================================================
-count (InputLayer)              [(None, 195)]        0                                            
-__________________________________________________________________________________________________
-encoder (Dense)                 (None, 64)           12544       count[0][0]                      
-__________________________________________________________________________________________________
-batch_normalization_12 (BatchNo (None, 64)           192         encoder[0][0]                    
-__________________________________________________________________________________________________
-act_encoder (Activation)        (None, 64)           0           batch_normalization_12[0][0]     
-__________________________________________________________________________________________________
-bottleneck (Dense)              (None, 32)           2080        act_encoder[0][0]                
-__________________________________________________________________________________________________
-batch_normalization_13 (BatchNo (None, 32)           96          bottleneck[0][0]                 
-__________________________________________________________________________________________________
-act_bottleneck (Activation)     (None, 32)           0           batch_normalization_13[0][0]     
-__________________________________________________________________________________________________
-decoder (Dense)                 (None, 64)           2112        act_bottleneck[0][0]             
-__________________________________________________________________________________________________
-batch_normalization_14 (BatchNo (None, 64)           192         decoder[0][0]                    
-__________________________________________________________________________________________________
-act_decoder (Activation)        (None, 64)           0           batch_normalization_14[0][0]     
-__________________________________________________________________________________________________
-mean (Dense)                    (None, 195)          12675       act_decoder[0][0]                
-__________________________________________________________________________________________________
-size_factors (InputLayer)       [(None, 1)]          0                                            
-__________________________________________________________________________________________________
-lambda (Lambda)                 multiple             0           mean[0][0]                       
-                                                                 size_factors[0][0]               
-__________________________________________________________________________________________________
-dispersion (Dense)              (None, 195)          12675       act_decoder[0][0]                
-__________________________________________________________________________________________________
-pi (Dense)                      (None, 195)          12675       act_decoder[0][0]                
-__________________________________________________________________________________________________
-slice (SliceLayer)              (None, 195)          0           lambda[4][0]                     
-                                                                 dispersion[0][0]                 
-                                                                 pi[0][0]                         
-==================================================================================================
-Total params: 55,241
-Trainable params: 54,921
-Non-trainable params: 320
-
+A deep auto-encoder model is proposed as a mechanism for infering the parameters of the noise model. The model is shown to scale linearly with the size of the data [1], which is an important advantage especially when dealing with shallow scRNA-seq data. The model used in this study has a fixed architecture. More extensive hyper parameter/architecture tuning (and flexibility in setting both) as proposed in the [original work](https://github.com/theislab/dca/).
 
 # Structure of Repo
 
