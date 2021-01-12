@@ -40,23 +40,23 @@ def generate_simdata(name='sim', nGroups=2, nGenes=200, batchCells=2000, dropout
 
     data = simulate.simulate(nGroups=nGroups, nGenes=nGenes, batchCells=batchCells, dropout=dropout)
 
-    # data_pd = dict((k, convert_rpy2(v)) for k, v in zip(data.names, list(data)))
+    data_pd = dict((k, convert_rpy2(v)) for k, v in zip(data.names, list(data)))
 
-    # raw = sc.AnnData(data_pd['counts'].values, obs=data_pd['cellinfo'], var=data_pd['geneinfo'])
-    # raw.obs_names = data_pd['cellinfo'].Cell
-    # raw.var_names = data_pd['geneinfo'].Gene
-    # sc.pp.filter_genes(raw, min_counts=1)
-    # with open('data/'+name+'_'+str(nGroups)+'_raw.pickle', 'wb') as handle:
-    #     pickle.dump(raw, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    raw = sc.AnnData(data_pd['counts'].values, obs=data_pd['cellinfo'], var=data_pd['geneinfo'])
+    raw.obs_names = data_pd['cellinfo'].Cell
+    raw.var_names = data_pd['geneinfo'].Gene
+    sc.pp.filter_genes(raw, min_counts=1)
+    with open('data/'+name+'_'+str(nGroups)+'_raw.pickle', 'wb') as handle:
+        pickle.dump(raw, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    # true = sc.AnnData(data_pd['truecounts'].values, obs=data_pd['cellinfo'], var=data_pd['geneinfo'])
-    # true.obs_names = data_pd['cellinfo'].Cell
-    # true.var_names = data_pd['geneinfo'].Gene
-    # true = true[:, raw.var_names].copy()
-    # with open('data/'+name+'_'+str(nGroups)+'_true.pickle','wb') as handle:
-    #     pickle.dump(true, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    true = sc.AnnData(data_pd['truecounts'].values, obs=data_pd['cellinfo'], var=data_pd['geneinfo'])
+    true.obs_names = data_pd['cellinfo'].Cell
+    true.var_names = data_pd['geneinfo'].Gene
+    true = true[:, raw.var_names].copy()
+    with open('data/'+name+'_'+str(nGroups)+'_true.pickle','wb') as handle:
+        pickle.dump(true, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
-    return data
+    return data, data_pd
 
 def read_dataset(adata, test_split=False, copy=False):
     if copy: adata = adata.copy()
