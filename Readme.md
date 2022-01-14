@@ -5,7 +5,7 @@ This project explores the use of a deep auto-encoder with a noise model loss fun
 # Problem Overview
 
 ## A foreword on scRNA-seq Data
-Single-cell RNA sequencing (scRNA-seq) is a recent sequencing method capable of getting the counts of expressed genes per cell (as opposed to count per cell sample like [Bulk-seq]() technologies). This new sequencing technology allows studying biological phenomena at a new resolution. The downside of the method is generating high-dimensional sparse matrices, which are exacerbated by noise-inducing operations like amplification and [add more]. The output can therefore be a large matrix with multiple false zero-counts, known as *dropout*. 
+Single-cell RNA sequencing (scRNA-seq) is a recent sequencing method capable of getting the counts of expressed genes per cell (as opposed to count per cell sample like [Bulk-seq]() technologies). This new sequencing technology allows studying biological phenomena at a new resolution. The downside of the method is generating high-dimensional sparse matrices, which are exacerbated by noise-inducing operations like amplification. The output can therefore be a large matrix with multiple false zero-counts, known as *dropout*. 
 
 Zero-counts reflect that a gene is repressed for a given cell (i.e., the cell in its current state does not use said gene to function). False zero counts can therefore give the wrong idea about the state of the cell. It would be helpful to identify the false counts and impute them (i.e, extrapolate their values) from neighboring cells and/or genes. This operation is known as *denoising*. 
 
