@@ -13,7 +13,7 @@ This work builds on [DCA](https://github.com/theislab/dca/) a method reported to
 
 
 ## Denoising from a Bayesian Perspective
-One approach to denoising is to consider the generative model of the counts. It is wildly speculated that read-based methods implicitly assume a [Zero-Inflated Negative Binomial](https://en.wikipedia.org/wiki/Zero-inflated_model)(ZINB) as a count distribution [2]. The generative process for this data looks something like this:
+One approach to denoising is to consider the generative model of the counts. It is wildly speculated that read-based methods implicitly assume a [Zero-Inflated Negative Binomial](https://en.wikipedia.org/wiki/Zero-inflated_model)(ZINB) as a count distribution [2]. The generative process for this data looks like this:
 
 > **input** 𝜋𝑔 ,  𝜇𝑔 ,  𝜃𝑔 ,  𝐺𝑒𝑛𝑒𝑠_{1𝑥𝑔}  // array of genes of size  𝑔   
 > **init** 𝑑𝑎𝑡𝑎_{𝑐𝑥𝑔}=0  // matrix of counts of size cells x genes  
@@ -57,7 +57,7 @@ We tested the model by generating PCA clustering plots on noise-ridden and denoi
 # Warnings & Future Work
 * A GPU is recommended for training the model.
 * The [DCA](https://github.com/theislab/dca/) library has old dependencies. The notebook executing DCA code installs the specific versions required of the libraries in the first line.
-* TODO: figure out why Google Colab seems to have a bit of trouble processing the *R* simulation script. It is recommended to run generate data on your local machine for now.
+* TODO: figure out why Google Colab seems to have a bit of trouble processing the *R* simulation script. It is recommended to generate the data on your local machine for now.
 * TODO: rewrite the loss function to be compatible with TF 2.0. Currently disabling eager execution provides a quick fix to the problem (as shown in `experiments.ipynb`).
 
 # References
